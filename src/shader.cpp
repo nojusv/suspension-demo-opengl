@@ -4,13 +4,14 @@
 const char* vert_shader_src = R"(
 	#version 330 core
 
+	uniform mat4 model;
     uniform mat4 view;
     uniform mat4 projection;
 
-    in vec3 position;
+    in vec2 position;
 
     void main() {
-        gl_Position = projection * view * vec4(position, 1.0);
+        gl_Position = projection * view * model * vec4(vec3(position, 1.0), 1.0);
     }
 )";
 

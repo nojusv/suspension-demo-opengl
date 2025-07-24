@@ -26,20 +26,27 @@ void Track::sample_spline(const std::vector<glm::vec2>& track_points)
 		{
 			float t = y / static_cast<float>(SEGMENT_SAMPLES);
 			// Creating a line to be used with GL_LINE_STRIP
-			track_verts.push_back(catmull_rom(track_points[i], track_points[i + 1], track_points[i + 2], track_points[i + 3], t));
+			verts.push_back(catmull_rom(track_points[i], track_points[i + 1], track_points[i + 2], track_points[i + 3], t));
 		}
 	}
 }
 
 void Track::setup_track()
 {
+	verts.emplace_back(0.f, 0.f);
+	verts.emplace_back(0.f, static_cast<float>(TRACK_STARTING_HEIGHT));
+
+	verts.emplace_back(static_cast<float>(TRACK_STARTING_WIDTH), 0.f);
+	verts.emplace_back(static_cast<float>(TRACK_STARTING_WIDTH), static_cast<float>(TRACK_STARTING_HEIGHT));
+
 	for (auto i = 0; i < 100; i++)
 	{
-		track_verts.emplace_back(i * 12.5f, 0.f);
-		track_verts.emplace_back(i * 12.5f, 150.f);
+		// Quick hack for smooth transition;
+		verts.emplace_back((TRACK_STARTING_WIDTH + 100) + i * 12.5f, 0.f);
+		verts.emplace_back((TRACK_STARTING_WIDTH + 100) + i * 12.5f, 150.f);
 	}
 
-	vbo = Glutils::setup_vec2_vbo(track_verts);
+	vbo = Glutils::setup_vec2_vbo(verts);
 	vao = Glutils::setup_vec2_vao(vbo);
 }
 
@@ -48,7 +55,7 @@ const GLuint Track::get_vao()
 	return vao;
 }
 
-const size_t Track::get_track_verts_size()
+const size_t Track::get_verts_size()
 {
-	return track_verts.size();
+	return verts.size();
 }

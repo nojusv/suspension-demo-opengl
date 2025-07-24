@@ -55,6 +55,7 @@ int main()
 		glClearColor(0.529f, 0.808f, 0.922f, 1.0f); // sky blue
 		glClear(GL_COLOR_BUFFER_BIT);
 		game.draw_track();
+		game.draw_wheel();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
